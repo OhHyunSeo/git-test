@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import Input from './common/Input';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function LoginContainer() {
     const [loginForm, setLoginForm] = useState({
@@ -9,18 +10,24 @@ export default function LoginContainer() {
         pw: '',
     });
 
+    const router = useRouter();
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setLoginForm((prev) => ({ ...prev, [name]: value }));
     };
     console.log(loginForm)
 
+    const handleLogin = () => {
+        //TODO: 로그인 기능 필요
+        router.push('/main')
+    }
+
     return (
         <div className="w-[360px] h-[340px] flex flex-col gap-[22px] items-center p-4 absolute left-[5%] top-[50%] bg-[#2d1010] rounded-md">
             <div className='w-full flex flex-col items-center gap-2'>
                 <Input name="id" placeHolder="아이디" value={loginForm.id} onChange={handleChange} />
                 <Input name="pw" placeHolder="비밀번호" value={loginForm.pw} onChange={handleChange} />
-                <div className='w-full h-[50px] flex items-center justify-center rounded-lg bg-[#5856d6] text-white'>
+                <div className='w-full h-[50px] flex items-center justify-center rounded-lg bg-[#5856d6] text-white cursor-pointer' onClick={handleLogin}>
                     <p >로그인</p>
                 </div>
             </div>
