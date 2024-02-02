@@ -26,7 +26,7 @@ export default function LoginContainer() {
             </div>
             <div className='w-4/5 flex flex-col items-center gap-2'>
                 <Link className='move-button' href={'/'}>아이디 / 비밀번호 찾기</Link>
-                <Link className='move-button' href={'/'}>회원가입</Link>
+                <Link className='move-button' href={'/signUp'}>회원가입</Link>
             </div>
         </div>
     );
