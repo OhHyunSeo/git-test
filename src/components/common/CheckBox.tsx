@@ -9,7 +9,7 @@ export default function CheckBox({ name, value }: {name: string, value: boolean}
       <input
         id={name}
         name={name}
-        checked={value}
+        defaultChecked={value}
         className="appearance-none hidden"
       />
       {

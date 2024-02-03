@@ -4,8 +4,8 @@ export default function MovieInfo({movieTitle, handleSubmit}: {movieTitle: strin
 
   return (
     <div className="w-full max-w-[1920px] flex justify-center mt-4">
-      <div className="w-full flex px-16 py-4  gap-5">
-        <div className="w-[280px] h-[350px]  flex items-center justify-center border-r border-[#c1c1c1]">
+      <div className="w-full flex px-16 py-3  gap-5">
+        <div className="w-[280px] h-[330px]  flex items-center justify-center border-r border-[#c1c1c1]">
           <img
             className="min-w-[252px] h-full rounded-lg"
             src={`/images/poster/${movieTitle}.jpg`}
@@ -39,7 +39,6 @@ export default function MovieInfo({movieTitle, handleSubmit}: {movieTitle: strin
         <button className="w-[140px] h-[50px] bg-[#9356d6] text-white text-[18px] rounded-lg" onClick={handleSubmit}>
             <p>선택 완료</p>
         </button>
-        <img src="/images/Check.svg" alt="" />
       </div>
     </div>
   );

@@ -1,7 +1,5 @@
 "use client";
 import Divider from "@/components/common/Divider";
-import Header from "@/components/header/Header";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";

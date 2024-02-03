@@ -34,7 +34,7 @@ export default function RankProfile({ name, point, rank, isRank }: RankProfileTy
       <p className="text-[#000000] text-[14px] relative bottom-3">@{name}</p>
       <div className="absolute -top-6 left-1/2 -translate-x-1/2">
         {isRank && (
-          <img src="/images/Ranker.png" alt="랭크 아이콘" className="w-10 h-10" />
+          <img src="/images/Ranker.svg" alt="랭크 아이콘" className="w-10 h-10" />
         )}
       </div>
     </div>
