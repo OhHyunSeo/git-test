@@ -1,44 +1,70 @@
 "use client";
-import Button from "@/components/common/Button";
+import CheckBackground from "@/components/common/CheckBackground";
 import Divider from "@/components/common/Divider";
+import MovieInfo from "@/components/movie/MovieInfo";
+import { MoviePlaceDataType } from "@/type/moviePlaceDataType";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export default function page({ params }) {
-  const [movieData, setMovieData] = useState();
+export default function MovieDetailPage({ params }: {params: {movie: string | number}}) {
+  const [movieData, setMovieData] = useState<MoviePlaceDataType[]>([]);
+  const [selectedPlace, setSelectedPlace] = useState<number[]>([]);
 
   useEffect(() => {
     axios.get("http://localhost:3000/data.json").then((res) => {
       const filterData = res.data.filter(
-        (item) => String(item.TITLE_NM) === params.movie
+        (item: MoviePlaceDataType) => String(item.TITLE_NM) === decodeURIComponent(params.movie as string)
       );
-      console.log(filterData);
       setMovieData(filterData);
     });
   }, []);
 
-  const handleClick = () => {};
+  const handleClick = (id: number) => {
+    if(selectedPlace.includes(id)){
+        const filter = selectedPlace.filter((item) => item!== id)
+        setSelectedPlace(filter);
+    }else{
+        setSelectedPlace((prev) => [...prev, id]);
+    }
+  };
+
+  const handleSubmit = () => {};
 
   return (
-    <div className="w-full h-full min-w-[1920px] flex flex-col items-center">
+    <div className="w-full h-full min-w-[1920px]  flex flex-col items-center">
       <Divider />
+      <MovieInfo
+        movieTitle={decodeURIComponent(params.movie as string)}
+        handleSubmit={handleSubmit}
+      />
 
-      <div className="w-full flex justify-center px-10 mt-4">
-        <div className="w-[400px] flex flex-col items-center gap-5">
-          <div className="w-4/5 rounded-lg">
-            <img
-              className="w-full rounded-[inherit]"
-              src={`/images/poster/${params.movie}.jpg`}
-              alt="영화 포스터 이미지"
-            />
-          </div>
-          <Button
-            name="촬영지 기반 최단 경로 자동 선택"
-            onClick={handleClick}
-          />
-          <Button name="사용자 지정 경로 선택" onClick={handleClick} />
+      <div className="w-full relative">
+        <Divider />
+        <div className="absolute left-1/2 -translate-x-1/2 -top-8">
+          <p className="text-[#030303] text-[24px] font-[700]">
+            영화의 촬영지를 골라주세요
+          </p>
         </div>
-        <div className="w-2/3"></div>
+      </div>
+      <div className="w-full max-w-[1920px] grid grid-cols-5 gap-y-4 px-16 py-8">
+        {movieData?.map((movie) => (
+          <div key={movie.SEQ_NO} className="w-[340px] h-[220px] flex flex-col items-center">
+            <div
+              className="w-full h-[90%] rounded-lg cursor-pointer relative"
+              onClick={() => handleClick(movie.SEQ_NO)}
+            >
+              <img
+                src={`/images/place/${movie.TITLE_NM}/${movie.PLACE_NM}.png`}
+                alt="장소 이미지"
+                className="w-full h-full rounded-lg"
+              />
+              {selectedPlace.includes(movie.SEQ_NO) && <CheckBackground />}
+            </div>
+            <div className="min-w-[60%] px-2 py-1 flex items-center justify-center bg-[#030303] rounded-full mt-[2px]">
+              <p className="text-[18px] text-white">{movie.PLACE_NM}</p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

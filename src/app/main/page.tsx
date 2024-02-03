@@ -5,17 +5,18 @@ import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { MoviePlaceDataType } from "@/type/moviePlaceDataType";
 
-export default function page() {
-  const [movies, setMovies] = useState([]);
+export default function MainPage() {
+  const [movies, setMovies] = useState<string[]>([]);
 
   useEffect(() => {
     axios.get("http://localhost:3000/data.json").then((res) => {
       const filterData = [
-        ...new Set(res.data.map((item) => String(item.TITLE_NM))),
+        ...new Set(res.data.map((item: MoviePlaceDataType) => String(item.TITLE_NM))),
       ];
       console.log(filterData);
-      setMovies(filterData);
+      setMovies(filterData as string[]);
     });
   }, []);
 
@@ -29,9 +30,8 @@ export default function page() {
         </div>
         <div className="w-full grid grid-cols-5 gap-y-6">
           {movies.map((movie, i) => {
-            const movieData = movies.filter((item) => item.TITLE_NM === movie);
             return (
-              <Link href={`/main/${movie}`} className="flex flex-col items-start">
+              <Link key={movie} href={`/main/${movie}`} className="flex flex-col items-start">
                 <div key={i} className="w-[250px] h-[320px] rounded-lg">
                   <img
                     className="w-full h-full rounded-[inherit]"

@@ -10,7 +10,7 @@ export default function Header() {
     router.push("/");
   };
   return (
-    <div className="w-full h-[106px] min-w-[1920px] flex items-center justify-between bg-white">
+    <div className="w-full h-[106px] min-w-[1920px] px-[45px] flex items-center justify-between bg-white">
       <Link href={"/main"} className="flex items-center">
         <Image
           src="/logo/logo.png"
@@ -31,8 +31,9 @@ export default function Header() {
           <Link href={"/leaderboard"}>리더보드</Link>
         </li>
       </ul>
-      <div className="flex items-center justify-center gap-4">
-        <div className="bg-black border-2 border-purple-500 rounded-md">
+      <div className="flex items-center justify-center gap-10">
+        <div className="bg-black border-2 border-purple-500 rounded-md px-2 flex items-center justify-center gap-1">
+            <img src="/images/Logout.png" alt="" className="w-8 h-8" />
           <button
             className="text-[18px] font-[500] cursor-pointer text-white p-2"
             onClick={handleLogout}
@@ -42,10 +43,10 @@ export default function Header() {
         </div>
         <Link href={"/mypage"}>
           <Image
-            src={"/logo/logo.png"}
+            src={"/images/Mypage.png"}
             alt="마이 페이지"
-            width={120}
-            height={120}
+            width={85}
+            height={85}
           />
         </Link>
       </div>
