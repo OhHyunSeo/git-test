@@ -10,7 +10,8 @@ export default function Header() {
     router.push("/");
   };
 
-  const path = usePathname()
+  const path = usePathname();
+  const headerValidate = path === "/" || path === "/signUp";
 
   const HEADER_CATEGORY_LIST = [
     {
@@ -23,7 +24,7 @@ export default function Header() {
     },
   ];
 
-  return (
+  return !headerValidate ? (
     <div className="w-full h-[106px] min-w-[1920px] px-[45px] flex items-center justify-between bg-white">
       <Link href={"/main"} className="flex items-center">
         <Image
@@ -37,7 +38,14 @@ export default function Header() {
       <ul className="w-[20%] flex items-center justify-between gap-10 text-[32px]">
         {HEADER_CATEGORY_LIST.map((item) => (
           <li key={item.name}>
-            <Link href={item.path} className={`${path.includes(item.path) && 'text-[#9356d6] font-[600]'}`}>{item.name}</Link>
+            <Link
+              href={item.path}
+              className={`${
+                path.includes(item.path) && "text-[#9356d6] font-[600]"
+              }`}
+            >
+              {item.name}
+            </Link>
           </li>
         ))}
       </ul>
@@ -61,5 +69,5 @@ export default function Header() {
         </Link>
       </div>
     </div>
-  );
+  ) : null;
 }
