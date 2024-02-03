@@ -11,7 +11,7 @@ export default function MainPage() {
   const [movies, setMovies] = useState<string[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/data.json").then((res) => {
+    axios.get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/data.json`).then((res) => {
       const filterData = [
         ...new Set(res.data.map((item: MoviePlaceDataType) => String(item.TITLE_NM))),
       ];

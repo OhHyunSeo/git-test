@@ -11,7 +11,7 @@ export default function MovieDetailPage({ params }: {params: {movie: string | nu
   const [selectedPlace, setSelectedPlace] = useState<number[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/data.json").then((res) => {
+    axios.get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/data.json`).then((res) => {
       const filterData = res.data.filter(
         (item: MoviePlaceDataType) => String(item.TITLE_NM) === decodeURIComponent(params.movie as string)
       );
