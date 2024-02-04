@@ -3,7 +3,7 @@ import Divider from "@/components/common/Divider";
 import MovieInfo from "@/components/movie/MovieInfo";
 import PlaceBox from "@/components/movie/PlaceBox";
 import ReviewContainer from "@/components/movie/ReviewContainer";
-import { MoviePlaceDataType } from "@/type/moviePlaceDataType";
+import { MoviePlaceDataType } from "@/type/movieType";
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 
@@ -18,13 +18,14 @@ export default function MovieDetailPage({
   const [selectedPlace, setSelectedPlace] = useState<number[]>([]);
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/data.json`).then((res) => {
-      const filterData = res.data.filter(
-        (item: MoviePlaceDataType) =>
-          String(item.TITLE_NM) === decodeURIComponent(params.movie as string)
-      );
-      setMovieData(filterData);
-    });
+    axios
+      .get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie/${params.movie}`, {
+        params: { title: decodeURIComponent(params.movie as string) },
+      })
+      .then((res) => {
+        console.log(res)
+        setMovieData(res.data.findMoviePlace);
+      });
   }, []);
 
   const handleClick = (id: number) => {
@@ -44,7 +45,7 @@ export default function MovieDetailPage({
       <div className="w-full flex">
         {CATEGORY_LIST.map((category, i) => (
           <div
-          key={i}
+            key={i}
             className={`flex flex-1 h-[50px] items-center justify-center gap-6 font-[600] cursor-pointer ${
               i !== CATEGORY_LIST.length - 1 ? "border-r border-[#c1c1c1]" : ""
             }`}
@@ -75,7 +76,7 @@ export default function MovieDetailPage({
           <div className="w-full max-w-[1920px] grid grid-cols-5 gap-y-4 px-16 py-8">
             {movieData?.map((movie) => (
               <PlaceBox
-                key={movie.SEQ_NO}
+                key={movie.moviePlaceId}
                 movie={movie}
                 handleClick={handleClick}
                 selectedPlace={selectedPlace}
@@ -85,7 +86,9 @@ export default function MovieDetailPage({
         </>
       ) : (
         <>
-          <ReviewContainer movieTitle={decodeURIComponent(params.movie as string)} />
+          <ReviewContainer
+            movieTitle={decodeURIComponent(params.movie as string)}
+          />
         </>
       )}
     </div>
