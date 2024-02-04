@@ -32,7 +32,7 @@ export default function ReviewContainer({movieTitle}: {movieTitle: string}) {
         </div>
         <div className="flex flex-col gap-[21px]"></div>
       </div>
-      <ReviewList />
+      <ReviewList movieTitle={movieTitle} />
     </div>
   );
 }

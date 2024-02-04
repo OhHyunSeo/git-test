@@ -78,7 +78,7 @@ model MovieReview {
   movieReviewId   Int    @id  @default(autoincrement())
   content         String
   rating          Int
-  movieId         Int
+  movieTitle      String
   author          User?   @relation(fields: [authorId], references: [id])
   authorId        Int?
   createdAt       DateTime @default(now())
