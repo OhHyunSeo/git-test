@@ -1,12 +1,14 @@
 "use client";
+import { UserType, userState } from "@/atom/userStore";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
 
 export default function Header() {
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>("");
+  const [user, setUser] = useRecoilState(userState);
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("id");
@@ -30,7 +32,12 @@ export default function Header() {
   ];
 
   useEffect(() => {
-    setUserId(localStorage.getItem("id"));
+    const userInfo = {
+      userId: localStorage.getItem("id"),
+      userEmail: localStorage.getItem("email"),
+      userName: localStorage.getItem("userName"),
+    };
+    setUser(userInfo as UserType);
   }, []);
 
   return !headerValidate ? (
@@ -75,7 +82,7 @@ export default function Header() {
             width={60}
             height={60}
           />
-          <p className="font-[700]">{userId}</p>
+          <p className="font-[700]">{user.userName}</p>
         </Link>
       </div>
     </div>

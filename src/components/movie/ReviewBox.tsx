@@ -1,22 +1,45 @@
-import React from 'react';
+import React from "react";
 
-export default function ReviewBox() {
-    return (
-        <div className='w-full h-[62px] flex gap-3 border-b border-[#c1c1c1]'>
-            <div className='w-[40px] h-[45px] rounded-md'>
-                <img src="/images/profile.jpeg" alt="프로필 이미지" className='w-full h-full rounded-[inherit]' />
-            </div>
-            <div className='flex flex-col'>
-                <div className='flex gap-2 items-center text-[14px]'>
-                    <p>name</p>
-                    <div>별점</div>
-                </div>
-                <div>
-                    <p>리뷰입니다...........</p>
-                </div>
-            </div>
-            
+export default function ReviewBox({ review }: {review: any}) {
+  const arr = new Array(5).fill(0);
+
+  return (
+    <div className="w-full h-[62px] flex gap-3 border-b border-[#c1c1c1]">
+      <div className="w-[40px] h-[45px] rounded-md">
+        <img
+          src="/images/profile.jpeg"
+          alt="프로필 이미지"
+          className="w-full h-full rounded-[inherit]"
+        />
+      </div>
+      <div className="flex flex-col">
+        <div className="flex gap-2 items-center text-[14px]">
+          <p>{review.authorId}</p>
+          {arr.map((item, i) => (
+            <span
+              key={i}
+              className={i < review.rating ? "text-[#ffc107]" : "text-[#c1c1c1]"}
+            >
+              {i < review.rating ? (
+                <img
+                  src="/images/activeStar.png"
+                  alt="별점 이미지"
+                  className="w-3 h-3"
+                />
+              ) : (
+                <img
+                  src="/images/defaultStar.png"
+                  alt="별점 이미지"
+                  className="w-3 h-3"
+                />
+              )}
+            </span>
+          ))}
         </div>
-    );
+        <div>
+          <p>{review.content}</p>
+        </div>
+      </div>
+    </div>
+  );
 }
-

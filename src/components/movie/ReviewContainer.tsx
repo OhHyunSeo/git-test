@@ -1,5 +1,6 @@
 import React from "react";
 import ReviewList from "./ReviewList";
+import Divider from "../common/Divider";
 
 export default function ReviewContainer({movieTitle}: {movieTitle: string}) {
 

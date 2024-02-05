@@ -1,14 +1,15 @@
-import React, { FormEvent, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReviewBox from "./ReviewBox";
 import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { userState } from "@/atom/userStore";
+import ReviewPostArea from "./ReviewPostArea";
 
-export default function ReviewList({movieTitle}: {movieTitle: string}) {
+export default function ReviewList({ movieTitle }: { movieTitle: string }) {
   const [starRating, setStarRating] = useState(0);
-  const [review, setReview] = useState("");
-  const {userId} = useRecoilValue(userState);
-  console.log(userId)
+  const [reviewList, setReviewList] = useState<any[]>([]);
+  const user = useRecoilValue(userState);
+  console.log(user);
 
   const arr = new Array(5).fill(0);
 
@@ -20,23 +21,26 @@ export default function ReviewList({movieTitle}: {movieTitle: string}) {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    e.preventDefault();
-    setReview(e.target.value);
+  const handleStarInitial = () => {
+    setStarRating(0);
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const reqReview = {
-      authorId: userId,
-        content: review,
-        rating: starRating,
-        movieTitle: movieTitle,
-    }
-    axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/review`, reqReview).then((res) => {
-      console.log(res);
-    })
-  }
+  const getMovieReview = () => {
+    axios
+      .get(
+        `${
+          process.env.NEXT_PUBLIC_LOCAL_URL
+        }/api/review?movieTitle=${decodeURIComponent(movieTitle)}`
+      )
+      .then((res) => {
+        console.log(res);
+        setReviewList(res.data.data);
+      });
+  };
+
+  useEffect(() => {
+    getMovieReview();
+  }, [movieTitle]);
 
   return (
     <div className="w-full flex flex-col gap-3 px-16 mt-8">
@@ -71,21 +75,15 @@ export default function ReviewList({movieTitle}: {movieTitle: string}) {
           </div>
         </div>
       </div>
-      <form className="flex flex-col items-end gap-2" onSubmit={handleSubmit}>
-        <textarea
-          className="w-full border border-[#9356d6] rounded-lg p-4"
-          name="review"
-          cols={5}
-          rows={3}
-          onChange={handleChange}
-        />
-        <button className="w-[140px] h-[50px] bg-[#9356d6] text-white text-[18px] rounded-lg">
-          <p>리뷰 등록</p>
-        </button>
-      </form>
+      <ReviewPostArea
+        movieTitle={movieTitle}
+        starRating={starRating}
+        handleStarInitial={handleStarInitial}
+        getMovieReview={getMovieReview}
+      />
       <div className="flex flex-col gap-4">
-        {arr.map((item, i) => (
-          <ReviewBox key={i} />
+        {reviewList.map((item, i) => (
+          <ReviewBox review={item} key={i} />
         ))}
       </div>
     </div>

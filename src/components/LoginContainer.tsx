@@ -37,7 +37,8 @@ export default function LoginContainer() {
         axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/user/login`, loginForm).then((res) => {
             console.log(res.data);
             if (res.data.status === 200 && typeof window !== 'undefined') {
-                localStorage.setItem('id', res.data.data.userId);
+                localStorage.setItem('id', res.data.data.id);
+                localStorage.setItem('userName', res.data.data.userId);
                 localStorage.setItem('email', res.data.data.email);
                 setUser({
                     userId: res.data.data.id,
