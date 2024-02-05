@@ -26,6 +26,7 @@ export default function ReviewPostArea({
     e.preventDefault();
     const reqReview = {
       authorId: Number(user.userId),
+      authorName: user.userName,
       content: reviewText,
       rating: starRating,
       movieTitle: movieTitle,

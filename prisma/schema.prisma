@@ -81,6 +81,7 @@ model MovieReview {
   movieTitle      String
   author          User?   @relation(fields: [authorId], references: [id])
   authorId        Int?
+  authorName      String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime? @updatedAt
   deletedAt       DateTime?

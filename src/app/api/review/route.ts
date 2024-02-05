@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const reqReview = await request.json();
-  const { content, rating, movieTitle, authorId } = reqReview;
+  const { content, rating, movieTitle, authorId, authorName } = reqReview;
 
   try {
     const prisma = new PrismaClient();
@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
         rating,
         movieTitle,
         authorId,
+        authorName,
         createdAt: new Date(),
         updatedAt: null,
         deletedAt: null
@@ -36,7 +37,10 @@ export async function GET(request: NextRequest) {
     const resReviewList = await prisma.movieReview.findMany({
       where: {
         movieTitle: movieTitle as string
-      },
+      }, 
+      orderBy: {
+        createdAt: 'desc'
+      }
     });
       return NextResponse.json({data: resReviewList, status: 200});
   } catch (error) {

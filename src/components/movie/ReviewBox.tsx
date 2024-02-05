@@ -14,7 +14,7 @@ export default function ReviewBox({ review }: {review: any}) {
       </div>
       <div className="flex flex-col">
         <div className="flex gap-2 items-center text-[14px]">
-          <p>{review.authorId}</p>
+          <p>{review.authorName}</p>
           {arr.map((item, i) => (
             <span
               key={i}
