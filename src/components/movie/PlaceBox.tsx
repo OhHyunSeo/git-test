@@ -13,6 +13,7 @@ export default function PlaceBox({
   selectedPlace,
   handleClick,
 }: PlaceBoxType) {
+    console.log(movie.title, movie.placeName);
   return (
     <div
       key={movie.moviePlaceId}

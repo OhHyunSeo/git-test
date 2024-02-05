@@ -1,3 +1,4 @@
+import { getPrismaClient } from "@/utils/util";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -5,7 +6,7 @@ export async function POST(request: NextRequest) {
   const reqReview = await request.json();
   const { content, rating, movieTitle, authorId, authorName } = reqReview;
 
-  const prisma = new PrismaClient();
+  const {prisma} = getPrismaClient();
   const newReview = {
     content,
     rating,

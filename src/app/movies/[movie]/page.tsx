@@ -40,6 +40,7 @@ export default function MovieDetailPage({
   };
 
   const handleSubmit = () => {};
+  console.log(moviePlaceData)
 
   return movieInfoData && (
     <div className="w-full h-full min-w-[1920px]  flex flex-col items-center">

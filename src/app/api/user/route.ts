@@ -1,3 +1,4 @@
+import { getPrismaClient } from "@/utils/util";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
         deletedAt: undefined,
     }
   try {
-    const prisma = new PrismaClient();
+    const {prisma} = getPrismaClient();
 
     const createUser = await prisma.user.create({data: newUser});
 

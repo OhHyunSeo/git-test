@@ -1,10 +1,10 @@
+import { getPrismaClient } from "@/utils/util";
 import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
+  const { prisma } = getPrismaClient();
   try {
-    const prisma = new PrismaClient();
-
     const findMovies = await prisma.movie.findMany();
 
     return NextResponse.json(findMovies);
