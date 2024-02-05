@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   const { prisma } = getPrismaClient();
   const params = request.nextUrl.searchParams.get("title");
+  console.log(params)
 
   const findMovie = await prisma.movie.findMany({
     where: {
