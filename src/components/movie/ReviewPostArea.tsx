@@ -15,6 +15,7 @@ export default function ReviewPostArea({
   getMovieReview: () => void;
 }) {
   const [reviewText, setReviewText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const user = useRecoilValue(userState);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,6 +25,7 @@ export default function ReviewPostArea({
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setIsLoading(true)
     const reqReview = {
       authorId: Number(user.userId),
       authorName: user.userName,
@@ -38,7 +40,7 @@ export default function ReviewPostArea({
         setReviewText("");
         console.log(res);
         getMovieReview();
-      });
+      }).finally(() => setIsLoading(false))
   };
 
   return (
@@ -50,9 +52,10 @@ export default function ReviewPostArea({
         rows={3}
         value={reviewText}
         onChange={handleChange}
+        placeholder="리뷰를 입력해주세요."
       />
       <button className="w-[140px] h-[50px] bg-[#9356d6] text-white text-[18px] rounded-lg">
-        <p>리뷰 등록</p>
+        <p>{isLoading ? '등록 중...' : '리뷰 등록'}</p>
       </button>
     </form>
   );

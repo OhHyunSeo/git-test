@@ -8,6 +8,7 @@ import ReviewPostArea from "./ReviewPostArea";
 export default function ReviewList({ movieTitle }: { movieTitle: string }) {
   const [starRating, setStarRating] = useState(0);
   const [reviewList, setReviewList] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const user = useRecoilValue(userState);
   console.log(user);
 
@@ -35,10 +36,12 @@ export default function ReviewList({ movieTitle }: { movieTitle: string }) {
       .then((res) => {
         console.log(res);
         setReviewList(res.data.data);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
+    setIsLoading(true);
     getMovieReview();
   }, [movieTitle]);
 
@@ -61,13 +64,13 @@ export default function ReviewList({ movieTitle }: { movieTitle: string }) {
                   <img
                     src="/images/activeStar.png"
                     alt="별점 이미지"
-                    className="w-6 h-6"
+                    className="w-6 h-6 cursor-pointer"
                   />
                 ) : (
                   <img
                     src="/images/defaultStar.png"
                     alt="별점 이미지"
-                    className="w-6 h-6"
+                    className="w-6 h-6 cursor-pointer"
                   />
                 )}
               </span>
@@ -82,9 +85,11 @@ export default function ReviewList({ movieTitle }: { movieTitle: string }) {
         getMovieReview={getMovieReview}
       />
       <div className="flex flex-col gap-4">
-        {reviewList.map((item, i) => (
-          <ReviewBox review={item} key={i} />
-        ))}
+        {isLoading ? (
+          <p>로딩중입니다...</p>
+        ) : (
+          reviewList.map((item, i) => <ReviewBox review={item} key={i} />)
+        )}
       </div>
     </div>
   );

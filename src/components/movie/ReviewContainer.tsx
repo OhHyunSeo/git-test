@@ -1,8 +1,9 @@
 import React from "react";
 import ReviewList from "./ReviewList";
 import Divider from "../common/Divider";
+import { MovieDataType } from "@/type/movieType";
 
-export default function ReviewContainer({movieTitle}: {movieTitle: string}) {
+export default function ReviewContainer({movieInfo}: {movieInfo: MovieDataType}) {
 
     const handleClick = () => {}
   return (
@@ -11,29 +12,23 @@ export default function ReviewContainer({movieTitle}: {movieTitle: string}) {
         <div className="w-[200px] h-[250px]  flex items-center justify-center border-r border-[#c1c1c1]">
           <img
             className="min-w-[200px] h-full rounded-lg"
-            src={`/images/poster/${movieTitle}.jpg`}
+            src={`/images/poster/${movieInfo.title}.jpg`}
             alt="영화 포스터 이미지"
           />
         </div>
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-1 text-[#030303] font-[700]">
-            <p className="text-[24px]">{movieTitle}</p>
-            <p>개봉일: 2014년 12월 17일</p>
-            <p>평점: 3.7</p>
+            <p className="text-[24px]">{movieInfo.title}</p>
+            <p>개봉일: {movieInfo.releaseDate}</p>
+            <p>평점: {movieInfo.rating}</p>
             <p>
-              줄거리: 부산광영기세 있는 국제 시장을 배경으로 한 휴만 드라마
-              영화이다. 1950년대 ..... 줄거리: 부산광영기세 있는 국제 시장을
-              배경으로 한 휴만 드라마 영화이다. 1950년대 .....줄거리:
-              부산광영기세 있는 국제 시장을 배경으로 한 휴만 드라마 영화이다.
-              1950년대 .....줄거리: 부산광영기세 있는 국제 시장을 배경으로 한
-              휴만 드라마 영화이다. 1950년대 .....줄거리: 부산광영기세 있는 국제
-              시장을 배경으로 한 휴만 드라마 영화이다. 1950년대 .....
+              {movieInfo.plot}
             </p>
           </div>
         </div>
         <div className="flex flex-col gap-[21px]"></div>
       </div>
-      <ReviewList movieTitle={movieTitle} />
+      <ReviewList movieTitle={movieInfo.title} />
     </div>
   );
 }

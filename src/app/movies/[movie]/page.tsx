@@ -3,7 +3,7 @@ import Divider from "@/components/common/Divider";
 import MovieInfo from "@/components/movie/MovieInfo";
 import PlaceBox from "@/components/movie/PlaceBox";
 import ReviewContainer from "@/components/movie/ReviewContainer";
-import { MoviePlaceDataType } from "@/type/movieType";
+import { MovieDataType, MoviePlaceDataType } from "@/type/movieType";
 import axios from "axios";
 import React, { Fragment, useEffect, useState } from "react";
 
@@ -14,17 +14,19 @@ export default function MovieDetailPage({
 }) {
   const CATEGORY_LIST = ["촬영지 선택", "리뷰 보기"];
   const [currentPage, setCurrentPage] = useState(0);
-  const [movieData, setMovieData] = useState<MoviePlaceDataType[]>([]);
+  const [moviePlaceData, setMoviePlaceData] = useState<MoviePlaceDataType[]>([]);
+  const [movieInfoData, setMovieInfoData] = useState<MovieDataType>();
   const [selectedPlace, setSelectedPlace] = useState<number[]>([]);
 
   useEffect(() => {
     axios
-      .get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie/${params.movie}`, {
+      .get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie/${decodeURIComponent(params.movie as string)}`, {
         params: { title: decodeURIComponent(params.movie as string) },
       })
       .then((res) => {
         console.log(res)
-        setMovieData(res.data.findMoviePlace);
+        setMoviePlaceData(res.data.findMoviePlace);
+        setMovieInfoData(res.data.findMovie[0]);
       });
   }, []);
 
@@ -39,7 +41,7 @@ export default function MovieDetailPage({
 
   const handleSubmit = () => {};
 
-  return (
+  return movieInfoData && (
     <div className="w-full h-full min-w-[1920px]  flex flex-col items-center">
       <Divider />
       <div className="w-full flex">
@@ -58,10 +60,10 @@ export default function MovieDetailPage({
           </div>
         ))}
       </div>
-      {CATEGORY_LIST[currentPage] === "촬영지 선택" ? (
+      {CATEGORY_LIST[currentPage] === "촬영지 선택"  ? (
         <>
           <MovieInfo
-            movieTitle={decodeURIComponent(params.movie as string)}
+            movieInfo={movieInfoData}
             handleSubmit={handleSubmit}
           />
 
@@ -74,7 +76,7 @@ export default function MovieDetailPage({
             </div>
           </div>
           <div className="w-full max-w-[1920px] grid grid-cols-5 gap-y-4 px-16 py-8">
-            {movieData?.map((movie) => (
+            {moviePlaceData?.map((movie) => (
               <PlaceBox
                 key={movie.moviePlaceId}
                 movie={movie}
@@ -87,7 +89,7 @@ export default function MovieDetailPage({
       ) : (
         <>
           <ReviewContainer
-            movieTitle={decodeURIComponent(params.movie as string)}
+            movieInfo={movieInfoData}
           />
         </>
       )}
