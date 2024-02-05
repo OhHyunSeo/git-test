@@ -1,10 +1,14 @@
 import React, { FormEvent, useState } from "react";
 import ReviewBox from "./ReviewBox";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { userState } from "@/atom/userStore";
 
 export default function ReviewList({movieTitle}: {movieTitle: string}) {
   const [starRating, setStarRating] = useState(0);
   const [review, setReview] = useState("");
+  const {userId} = useRecoilValue(userState);
+  console.log(userId)
 
   const arr = new Array(5).fill(0);
 
@@ -24,11 +28,14 @@ export default function ReviewList({movieTitle}: {movieTitle: string}) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const reqReview = {
+      authorId: userId,
         content: review,
         rating: starRating,
         movieTitle: movieTitle,
     }
-    axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movieReview`, )
+    axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/review`, reqReview).then((res) => {
+      console.log(res);
+    })
   }
 
   return (
