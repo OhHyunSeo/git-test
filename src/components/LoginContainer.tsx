@@ -41,9 +41,9 @@ export default function LoginContainer() {
                 localStorage.setItem('email', res.data.data.userInfo.email);
                 localStorage.setItem('token', res.data.data.token);
                 setUser({
-                    userId: res.data.data.id,
-                    userEmail: res.data.data.email,
-                    userName: res.data.data.userId,
+                    userId: res.data.data.userInfo.id,
+                    userEmail: res.data.data.userInfo.email,
+                    userName: res.data.data.userInfo.userId,
                 });
                 router.push('/movies');
             } else handleErrorMessage();
