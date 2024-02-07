@@ -29,7 +29,6 @@ export default function LoginContainer() {
         const { name, value } = e.target;
         setLoginForm((prev) => ({ ...prev, [name]: value }));
     };
-    console.log(loginForm);
 
     const handleLogin = (e: FormEvent) => {
         e.preventDefault();
@@ -37,9 +36,10 @@ export default function LoginContainer() {
         axios.post(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/user/login`, loginForm).then((res) => {
             console.log(res.data);
             if (res.data.status === 200 && typeof window !== 'undefined') {
-                localStorage.setItem('id', res.data.data.id);
-                localStorage.setItem('userName', res.data.data.userId);
-                localStorage.setItem('email', res.data.data.email);
+                localStorage.setItem('id', res.data.data.userInfo.id);
+                localStorage.setItem('userName', res.data.data.userInfo.userId);
+                localStorage.setItem('email', res.data.data.userInfo.email);
+                localStorage.setItem('token', res.data.data.token);
                 setUser({
                     userId: res.data.data.id,
                     userEmail: res.data.data.email,

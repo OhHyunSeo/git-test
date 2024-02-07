@@ -9,7 +9,7 @@ export default function page() {
     const { userEmail, userId, userName } = userInfo;
 
     return (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full min-w-[1920px] flex flex-col items-center">
             <Divider />
             <div className="w-[85%] flex p-[50px]">
                 <div className="w-full flex items-center justify-between">

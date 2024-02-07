@@ -5,7 +5,7 @@ import PlaceBox from '@/components/movie/PlaceBox';
 import ReviewContainer from '@/components/movie/ReviewContainer';
 import { MovieDataType, MoviePlaceDataType } from '@/type/movieType';
 import axios from 'axios';
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function MovieDetailPage({ params }: { params: { movie: string | number } }) {
     const CATEGORY_LIST = ['촬영지 선택', '리뷰 보기'];
