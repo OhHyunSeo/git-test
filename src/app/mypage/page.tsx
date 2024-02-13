@@ -4,7 +4,7 @@ import Divider from '@/components/common/Divider';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 
-export default function page() {
+export default function MyPage() {
     const userInfo = useRecoilValue(userState);
     const { userEmail, userId, userName } = userInfo;
 
@@ -45,11 +45,7 @@ export default function page() {
                             <p className="text-[#030303] text-[18px] font-[500]">My movietrip</p>
                         </div>
                         <div className="flex gap-4">
-                            <img
-                                src="/images/reviewIcon.svg"
-                                alt="리뷰 아이콘"
-                                className="w-[25px] h-[25px]"
-                            />
+                            <img src="/images/reviewIcon.svg" alt="리뷰 아이콘" className="w-[25px] h-[25px]" />
 
                             <p className="text-[#030303] text-[18px] font-[500]">내가 쓴 리뷰</p>
                         </div>
@@ -63,20 +59,12 @@ export default function page() {
                 <div className="w-[85%] h-full px-[24px] py-[60px]">
                     <div className="w-full h-full flex flex-col justify-between">
                         <div className="flex gap-4">
-                            <img
-                                src="/images/logoutIcon.svg"
-                                alt="로그아웃 아이콘"
-                                className="w-[25px] h-[25px]"
-                            />
+                            <img src="/images/logoutIcon.svg" alt="로그아웃 아이콘" className="w-[25px] h-[25px]" />
 
                             <p className="text-[#030303] text-[18px] font-[500]">로그아웃</p>
                         </div>
                         <div className="flex gap-4">
-                            <img
-                                src="/images/deleteIcon.svg"
-                                alt="회원탈퇴 아이콘"
-                                className="w-[25px] h-[25px]"
-                            />
+                            <img src="/images/deleteIcon.svg" alt="회원탈퇴 아이콘" className="w-[25px] h-[25px]" />
 
                             <p className="text-[#030303] text-[18px] font-[500]">회원탈퇴</p>
                         </div>

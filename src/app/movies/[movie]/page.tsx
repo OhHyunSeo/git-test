@@ -1,88 +1,51 @@
 'use client';
+import { selectPlaceState } from '@/atom/selectPlaceStore';
 import Divider from '@/components/common/Divider';
-import MovieInfo from '@/components/movie/MovieInfo';
-import PlaceBox from '@/components/movie/PlaceBox';
-import ReviewContainer from '@/components/movie/ReviewContainer';
-import { MovieDataType, MoviePlaceDataType } from '@/type/movieType';
-import axios from 'axios';
+import KakaoMap from '@/components/movie/KakaoMap';
+import Map from '@/components/movie/Map';
+import MovieDetails from '@/components/movie/MovieDetails';
 import React, { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 
 export default function MovieDetailPage({ params }: { params: { movie: string | number } }) {
-    const CATEGORY_LIST = ['촬영지 선택', '리뷰 보기'];
-    const [currentPage, setCurrentPage] = useState(0);
-    const [moviePlaceData, setMoviePlaceData] = useState<MoviePlaceDataType[]>([]);
-    const [movieInfoData, setMovieInfoData] = useState<MovieDataType>();
-    const [selectedPlace, setSelectedPlace] = useState<number[]>([]);
+    const [isSelected, setIsSelected] = useState(false);
+    const setSelectPlace = useSetRecoilState(selectPlaceState);
 
-    useEffect(() => {
-        axios
-            .get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie/${params.movie as string}`, {
-                params: { title: decodeURIComponent(params.movie as string) },
-            })
-            .then((res) => {
-                console.log(res);
-                setMoviePlaceData(res.data.findMoviePlace);
-                setMovieInfoData(res.data.findMovie[0]);
-            });
-    }, []);
-
-    const handleClick = (id: number) => {
-        if (selectedPlace.includes(id)) {
-            const filter = selectedPlace.filter((item) => item !== id);
-            setSelectedPlace(filter);
-        } else {
-            setSelectedPlace((prev) => [...prev, id]);
-        }
+    const handleSelect = (validateMoviePlace: boolean) => {
+        validateMoviePlace && setIsSelected(true);
     };
 
-    const handleSubmit = () => {};
-    console.log(moviePlaceData);
+    const handleUnSelect = () => {
+        setIsSelected(false);
+    };
+    // 페이지 벗어날 때 선택한 장소 초기화
+    useEffect(() => {
+        return () => {
+            setSelectPlace([]);
+        };
+    }, []);
 
-    return (
-        movieInfoData && (
-            <div className="w-full h-full min-w-[1920px]  flex flex-col items-center">
-                <Divider />
-                <div className="w-full flex">
-                    {CATEGORY_LIST.map((category, i) => (
-                        <div
-                            key={i}
-                            className={`flex flex-1 h-[50px] items-center justify-center gap-6 font-[600] cursor-pointer ${
-                                i !== CATEGORY_LIST.length - 1 ? 'border-r border-[#c1c1c1]' : ''
-                            }`}
-                            onClick={() => setCurrentPage(i)}
-                        >
-                            <p>{category}</p>
-                            {currentPage === i && <div className="w-3 h-3 rounded-full bg-[#3164f4]" />}
-                        </div>
-                    ))}
+
+    return !isSelected ? (
+        <MovieDetails movie={params.movie as string} handleSelect={handleSelect} />
+    ) : (
+        <div className="w-full h-full min-w-[1920px]">
+            <Divider />
+            <div className="w-full flex items-center justify-between py-10 px-16">
+                <div className="flex items-center gap-5">
+                    <div onClick={handleUnSelect} className='cursor-pointer'>
+                        <img src="/images/return.svg" alt="돌아가기 아이콘" className="w-10 h-10" />
+                    </div>
+                    <h2 className="text-[#333333] text-[32px] font-[700]">선택한 촬영지 기반으로 경로를 안내할게요!</h2>
                 </div>
-                {CATEGORY_LIST[currentPage] === '촬영지 선택' ? (
-                    <>
-                        <MovieInfo movieInfo={movieInfoData} handleSubmit={handleSubmit} />
-
-                        <div className="w-full relative">
-                            <Divider />
-                            <div className="absolute left-1/2 -translate-x-1/2 -top-8">
-                                <p className="text-[#030303] text-[24px] font-[700]">영화의 촬영지를 골라주세요</p>
-                            </div>
-                        </div>
-                        <div className="w-full max-w-[1920px] grid grid-cols-5 gap-y-4 px-16 py-8">
-                            {moviePlaceData?.map((movie) => (
-                                <PlaceBox
-                                    key={movie.moviePlaceId}
-                                    movie={movie}
-                                    handleClick={handleClick}
-                                    selectedPlace={selectedPlace}
-                                />
-                            ))}
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <ReviewContainer movieInfo={movieInfoData} />
-                    </>
-                )}
+                <div className="w-[282px] h-[52px] flex items-center justify-between p-2 bg-black rounded-lg">
+                    <p className="text-[#f2f2f2] text-[24px]">{decodeURIComponent(params.movie as string)}</p>
+                    <img src="/images/Search.png" alt="검색 아이콘" className="w-[40px] h-[40px]" />
+                </div>
             </div>
-        )
+            <div className="w-full">
+                <KakaoMap />
+            </div>
+        </div>
     );
 }

@@ -46,8 +46,8 @@ export default function Header() {
         <Image
           src="/logo/logo.png"
           alt="로고 이미지"
-          width={120}
-          height={120}
+          width={100}
+          height={100}
         />
         <h1 className="text-[48px] font-[500]">무비 트립</h1>
       </Link>
