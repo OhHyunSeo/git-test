@@ -23,7 +23,7 @@ export default function MovieDetails({
 
     useEffect(() => {
         axios
-            .get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie/${movie as string}`, {
+            .get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie/${decodeURIComponent(movie as string)}`, {
                 params: { title: decodeURIComponent(movie as string) },
             })
             .then((res) => {
