@@ -8,9 +8,9 @@ import { MovieDataType, MoviePlaceDataType } from "@/type/movieType";
 export default function MainPage() {
   const [movies, setMovies] = useState<MovieDataType[]>([]);
 
+  // 영화 정보 가져오기
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_LOCAL_URL}/api/movie`).then((res) => {
-      console.log(res.data);
 
       setMovies(res.data);
     });

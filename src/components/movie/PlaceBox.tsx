@@ -6,14 +6,15 @@ import { selectPlaceState } from "@/atom/selectPlaceStore";
 
 type PlaceBoxType = {
   movie: MoviePlaceDataType;
-  handleClick: (movie: MoviePlaceDataType) => void;
+  handleClick?: (movie: MoviePlaceDataType) => void;
 };
 
 export default function PlaceBox({
   movie,
-  handleClick,
+  handleClick=() => {},
 }: PlaceBoxType) {
 
+  // 장소 컴포넌트
   const selectedPlace = useRecoilValue(selectPlaceState);
 
   return (
@@ -38,3 +39,4 @@ export default function PlaceBox({
     </div>
   );
 }
+ 

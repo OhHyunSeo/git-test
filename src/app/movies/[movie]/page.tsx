@@ -2,7 +2,6 @@
 import { selectPlaceState } from '@/atom/selectPlaceStore';
 import Divider from '@/components/common/Divider';
 import KakaoMap from '@/components/movie/KakaoMap';
-import Map from '@/components/movie/Map';
 import MovieDetails from '@/components/movie/MovieDetails';
 import React, { useEffect, useState } from 'react';
 import { useSetRecoilState } from 'recoil';

@@ -18,11 +18,13 @@ export default function ReviewPostArea({
   const [isLoading, setIsLoading] = useState(false);
   const user = useRecoilValue(userState);
 
+  // 리뷰 텍스트 변경
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     setReviewText(e.target.value);
   };
 
+  // 리뷰 등록
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setIsLoading(true)
@@ -38,7 +40,6 @@ export default function ReviewPostArea({
       .then((res) => {
         handleStarInitial();
         setReviewText("");
-        console.log(res);
         getMovieReview();
       }).finally(() => setIsLoading(false))
   };

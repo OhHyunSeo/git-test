@@ -2,7 +2,7 @@
 import { UserType, userState } from "@/atom/userStore";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useRecoilState } from "recoil";
 
@@ -13,12 +13,14 @@ export default function Header() {
     if (typeof window !== "undefined") {
       localStorage.removeItem("id");
       localStorage.removeItem("email");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("token");
     }
     router.push("/");
   };
 
   const path = usePathname();
-  const headerValidate = path === "/" || path === "/signUp";
+  const headerValidate = path === "/" || path === "/signUp" || path === '/findId';
 
   const HEADER_CATEGORY_LIST = [
     {

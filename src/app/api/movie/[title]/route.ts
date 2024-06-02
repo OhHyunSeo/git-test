@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ findMovie, findMoviePlace });
+    return (findMoviePlace && findMovie) && NextResponse.json({ findMovie, findMoviePlace });
   } catch (error) {
     console.error(error);
     NextResponse.json({ message: "Internal server error" });

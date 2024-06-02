@@ -3,7 +3,10 @@ import { selectPlaceState } from '@/atom/selectPlaceStore';
 import axios from 'axios';
 import Script from 'next/script';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import PlaceBox from './PlaceBox';
+import Divider from '../common/Divider';
+import { MoviePlaceDataType } from '@/type/movieType';
 
 declare global {
     interface Window {
@@ -27,24 +30,48 @@ type Props = {
 export default function KakaoMap() {
     const API_KEY = process.env.NEXT_PUBLIC_KAKAO_API_KEY;
     const REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
-    const [wayPoints, setWayPoints] = useState<WaypointType[]>([]);
-    // const [linePaths, setLinePaths] = useState<any[]>([]);
-    const selectedPlace = useRecoilValue(selectPlaceState);
-    const DEFAULT_LAT = selectedPlace[0].lat;
-    const DEFAULT_LNG = selectedPlace[1].lng;
-    let linePaths: any[] = [];
+    const [map, setMap] = useState<any>();
+    const [selectedPlace, setSelectedPlace] = useRecoilState(selectPlaceState);
+    const DEFAULT_LAT = String(selectedPlace[0].lat);
+    const DEFAULT_LNG = String(selectedPlace[0].lng);
+    const [linePaths, setLinePaths] = useState<any[]>([]);
+    const spotList = selectedPlace.slice(1,selectedPlace.length);
 
-    useEffect(() => {
-        const filterWayPoints = selectedPlace.map((item) => {
-            return {
-                name: item.placeName,
-                x: item.lng,
-                y: item.lat,
-            };
+    const handleMarkers = (lat: any, lng: any, start: boolean, last: boolean) => {
+        const markerImage = new window.kakao.maps.MarkerImage(
+            `/images/${last ? 'endLoad' : start ? 'startLoad' : 'spotLoad'}.svg`,
+            new window.kakao.maps.Size(50, 50)
+        );
+        const markerPosition = new window.kakao.maps.LatLng(lat, lng);
+        const marker = new window.kakao.maps.Marker({
+            position: markerPosition,
+            image: markerImage,
         });
-        setWayPoints(filterWayPoints);
-    }, [selectedPlace]);
 
+        // 지도에 마커 표시
+        marker.setMap(map);
+    };
+
+    const handleSetLoad = () => {
+        if (map && linePaths.length > 0) {
+            selectedPlace.map((wayPoint, i) => {
+                handleMarkers(wayPoint.lat, wayPoint.lng, i===0, i === selectedPlace.length - 1);
+            });
+            // 지도에 표시할 선을 생성합니다
+            const polyline = new window.kakao.maps.Polyline({
+                path: linePaths, // 선을 구성하는 좌표배열 입니다
+                strokeWeight: 10, // 선의 두께 입니다
+                strokeColor: 'blue', // 선의 색깔입니다
+                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle: 'solid', // 선의 스타일입니다
+            });
+
+            // 지도에 선을 표시합니다
+            polyline.setMap(map);
+        }
+    };
+    
+    // 카카오맵 로드
     const loadKakaoMap = () => {
         window.kakao.maps.load(() => {
             axios
@@ -55,17 +82,18 @@ export default function KakaoMap() {
                     },
                 })
                 .then((res) => {
-                    console.log(res);
-                    linePaths.push(new window.kakao.maps.LatLng(DEFAULT_LAT, DEFAULT_LNG));
-                    // setLinePaths((prev) => [...prev, new window.kakao.maps.LatLng(DEFAULT_LNG, DEFAULT_LAT)]);
-                    res.data.routes[0].sections.forEach((section: any) => {
+                    console.log(res)
+                    setLinePaths((prev) => [...prev, new window.kakao.maps.LatLng(DEFAULT_LAT, DEFAULT_LNG)]);
+                    res.data.routes[0]?.sections?.forEach((section: any) => {
                         section.roads.map((road: any) => {
-                            // setLinePaths((prev) => [
-                            //     ...prev,
-                            //     new window.kakao.maps.LatLng(road.vertexes[0], road.vertexes[1]),
-                            // ]);
-                            linePaths.push(new window.kakao.maps.LatLng(road.vertexes[1], road.vertexes[0]))
-                            linePaths.push(new window.kakao.maps.LatLng(road.vertexes[3], road.vertexes[2]))
+                            setLinePaths((prev) => [
+                                ...prev,
+                                new window.kakao.maps.LatLng(road.vertexes[1], road.vertexes[0]),
+                            ]);
+                            setLinePaths((prev) => [
+                                ...prev,
+                                new window.kakao.maps.LatLng(road.vertexes[3], road.vertexes[2]),
+                            ]);
                         });
                     });
                 })
@@ -76,28 +104,8 @@ export default function KakaoMap() {
                         level: 3,
                     };
                     const map = new window.kakao.maps.Map(mapContainer, mapOption);
-
-                    console.log(linePaths);
-
-                    // 지도에 표시할 선을 생성합니다
-                    const polyline = new window.kakao.maps.Polyline({
-                        path: linePaths, // 선을 구성하는 좌표배열 입니다
-                        strokeWeight: 10, // 선의 두께 입니다
-                        strokeColor: 'blue', // 선의 색깔입니다
-                        strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-                        strokeStyle: 'solid', // 선의 스타일입니다
-                    });
-
-                    // 지도에 선을 표시합니다
-                    polyline.setMap(map);
+                    setMap(map);
                 });
-            // setLinePaths((prev) => [
-            //     ...prev,
-            //     new window.kakao.maps.LatLng(
-            //         Number(selectedPlace[selectedPlace.length - 1].lat),
-            //         Number(selectedPlace[selectedPlace.length - 1].lng),
-            //     ),
-            // ]);
         });
     };
 
@@ -115,7 +123,7 @@ export default function KakaoMap() {
         },
 
         // 경유지
-        waypoints: selectedPlace.map((item) => {
+        waypoints: spotList.map((item) => {
             return {
                 name: item.placeName,
                 x: item.lng,
@@ -132,7 +140,15 @@ export default function KakaoMap() {
     return (
         selectedPlace &&
         linePaths && (
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex flex-col gap-2 items-center justify-center">
+                <img
+                    src="/images/kakaoMap.png"
+                    alt="카카오맵 로고"
+                    width={120}
+                    height={120}
+                    className="rounded-lg cursor-pointer"
+                    onClick={handleSetLoad}
+                />
                 <Script
                     strategy="afterInteractive"
                     type="text/javascript"
@@ -141,6 +157,15 @@ export default function KakaoMap() {
                     onError={console.error}
                 />
                 <div id={'map'} className="w-4/5 h-[800px]" />
+                <div className='flex flex-col items-start mt-5'>
+                    <h2 className='text-[32px] text-[#333333] font-[700] mb-2'>선택한 촬영지</h2>
+                    <Divider height='h-[8px]' />
+                    <div className="w-full max-w-[1920px] grid grid-cols-5 gap-4 px-16 py-8">
+                        {selectedPlace?.map((movie) => (
+                            <PlaceBox key={movie.moviePlaceId} movie={movie} />
+                        ))}
+                    </div>
+                </div>
             </div>
         )
     );

@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   try {
     const findMovies = await prisma.movie.findMany();
 
-    return NextResponse.json(findMovies);
+    return findMovies && NextResponse.json(findMovies);
   } catch (error) {
     console.error(error);
     NextResponse.json({ message: "Internal server error" });

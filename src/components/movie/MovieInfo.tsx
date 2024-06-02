@@ -2,7 +2,7 @@ import { MovieDataType } from "@/type/movieType";
 import React from "react";
 
 export default function MovieInfo({movieInfo, handleSubmit}: {movieInfo: MovieDataType, handleSubmit: () => void}) {
-console.log(movieInfo)
+
   return (
     <div className="w-full max-w-[1920px] flex justify-center mt-4">
       <div className="w-full flex px-16 py-3  gap-5">
@@ -17,13 +17,13 @@ console.log(movieInfo)
           <div className="flex flex-col gap-6 text-[#030303] font-[700]">
             <p className="text-[24px]">영화 정보</p>
             <p>
-              {movieInfo.plot}
+              {movieInfo.plot}    {/* 영화의 간략한 줄거리를 소개 */}
             </p>
-            <p>개봉일: {movieInfo.releaseDate}</p>
+            <p>개봉일: {movieInfo.releaseDate}</p>    {/* 영화의 개봉일 */}
             {
-              movieInfo.audience 
+              movieInfo.audience  
               ?
-               <p>관객수 : movieInfo.audience</p>
+               <p>관객수 : {movieInfo.audience}</p>   
               :
             <p>시청률: {movieInfo.peekview}</p>
             }

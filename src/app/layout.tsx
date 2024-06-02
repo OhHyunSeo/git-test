@@ -3,6 +3,8 @@ import { Inter } from 'next/font/google';
 import './index.css';
 import Header from '@/components/header/Header';
 import RecoilContext from '@/context/RecoilContext';
+import { useEffect } from 'react';
+import AuthProvider from '@/components/AuthProvider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +22,7 @@ export default function RootLayout({
         <html lang="en">
             <body className={inter.className}>
                 <RecoilContext>
+                    <AuthProvider />
                     <Header />
                     <main className="w-full h-full">{children}</main>
                 </RecoilContext>

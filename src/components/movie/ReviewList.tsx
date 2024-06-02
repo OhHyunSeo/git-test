@@ -10,7 +10,6 @@ export default function ReviewList({ movieTitle }: { movieTitle: string }) {
   const [reviewList, setReviewList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const user = useRecoilValue(userState);
-  console.log(user);
 
   const arr = new Array(5).fill(0);
 
@@ -34,7 +33,6 @@ export default function ReviewList({ movieTitle }: { movieTitle: string }) {
         }/api/review?movieTitle=${decodeURIComponent(movieTitle)}`
       )
       .then((res) => {
-        console.log(res);
         setReviewList(res.data.data);
       })
       .finally(() => setIsLoading(false));

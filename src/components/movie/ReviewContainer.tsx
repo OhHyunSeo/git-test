@@ -5,7 +5,7 @@ import { MovieDataType } from "@/type/movieType";
 
 export default function ReviewContainer({movieInfo}: {movieInfo: MovieDataType}) {
 
-    const handleClick = () => {}
+  // MovieInfo 컴포넌트에서 받아온 movieInfo를 props로 받아와서 사용
   return (
     <div className="w-full max-w-[1920px] flex flex-col justify-center mt-4">
       <div className="w-full flex px-16 py-3  gap-5">

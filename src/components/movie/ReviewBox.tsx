@@ -3,6 +3,7 @@ import React from "react";
 export default function ReviewBox({ review }: {review: any}) {
   const arr = new Array(5).fill(0);
 
+  // 리뷰 박스 컴포넌트
   return (
     <div className="w-full h-[62px] flex gap-3 border-b border-[#c1c1c1]">
       <div className="w-[40px] h-[45px] rounded-md">
